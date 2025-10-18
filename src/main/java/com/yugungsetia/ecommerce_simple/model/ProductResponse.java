@@ -37,6 +37,7 @@ public class ProductResponse implements Serializable {
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .stockQuantity(product.getStockQuantity())
+                .weight(product.getWeight())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .categories(categories)
