@@ -1,0 +1,25 @@
+package com.yugungsetia.ecommerce_simple.repository;
+
+import com.yugungsetia.ecommerce_simple.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
+
+
+    @Query(value = """
+    SELECT * FROM users 
+    WHERE lower(username) LIKE :keyword OR 
+    lower(email) LIKE :keyword
+    """, nativeQuery = true)
+    Page<User> searchUsers(String keyword, Pageable pageable);
+}
