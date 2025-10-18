@@ -1,6 +1,7 @@
 package com.yugungsetia.ecommerce_simple.config.middleware;
 
 import com.yugungsetia.ecommerce_simple.common.errors.BadRequestException;
+import com.yugungsetia.ecommerce_simple.common.errors.InvalidPasswordException;
 import com.yugungsetia.ecommerce_simple.common.errors.ResourceNotFoundException;
 import com.yugungsetia.ecommerce_simple.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,6 +67,17 @@ public class GenericExceptionHandler {
         return ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(errors.toString())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public @ResponseBody ErrorResponse handleUnauthorizedException(HttpServletRequest req, Exception exception) {
+        return ErrorResponse.builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();
     }
