@@ -24,7 +24,7 @@ public interface UserAddressRepository extends JpaRepository<UserAddress, Long> 
 
     @Query(value = """
              UPDATE user_addresses SET is_default = true 
-             WHERE user_address_id = :addressid 
+             WHERE user_address_id = :addressId 
             """, nativeQuery = true)
     @Modifying
     void setDefaultAddress(Long addressId);

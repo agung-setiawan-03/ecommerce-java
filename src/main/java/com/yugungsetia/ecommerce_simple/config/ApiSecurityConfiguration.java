@@ -28,7 +28,7 @@ public class ApiSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registery -> {
-                    registery.requestMatchers("/auth/**", "/api-docs/**", "/swagger-ui/**", "/products")
+                    registery.requestMatchers("/auth/**", "/api-docs/**", "/swagger-ui/**", "/products", "/webhook/xendit")
                             .permitAll().anyRequest().authenticated();
                 }).sessionManagement(configurer -> {
                     configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

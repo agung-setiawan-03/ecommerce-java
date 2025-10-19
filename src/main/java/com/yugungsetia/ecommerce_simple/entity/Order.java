@@ -27,8 +27,7 @@ public class Order {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subTotal;
 
     @Column(name = "shipping_fee", nullable = false, precision = 10, scale = 2)
@@ -48,6 +47,18 @@ public class Order {
 
     @Column(name = "awb_number")
     private String awbNumber;
+
+
+    @Column(name = "xendit_invoice_id")
+    private String xenditInvoiceId;
+
+
+    @Column(name = "xendit_payment_method")
+    private String xenditPaymentMethod;
+
+
+    @Column(name = "xendit_payment_status")
+    private String xenditPaymentStatus;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

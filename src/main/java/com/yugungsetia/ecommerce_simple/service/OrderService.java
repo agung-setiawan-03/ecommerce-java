@@ -3,13 +3,14 @@ package com.yugungsetia.ecommerce_simple.service;
 import com.yugungsetia.ecommerce_simple.entity.Order;
 import com.yugungsetia.ecommerce_simple.model.CheckoutRequest;
 import com.yugungsetia.ecommerce_simple.model.OrderItemResponse;
+import com.yugungsetia.ecommerce_simple.model.OrderResponse;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
 
-    Order checkout(CheckoutRequest checkoutRequest);
+    OrderResponse checkout(CheckoutRequest checkoutRequest);
 
     Optional<Order> findOrderById(Long orderId);
 

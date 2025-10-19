@@ -2,10 +2,7 @@ package com.yugungsetia.ecommerce_simple.service;
 
 import com.yugungsetia.ecommerce_simple.common.errors.ResourceNotFoundException;
 import com.yugungsetia.ecommerce_simple.entity.*;
-import com.yugungsetia.ecommerce_simple.model.CheckoutRequest;
-import com.yugungsetia.ecommerce_simple.model.OrderItemResponse;
-import com.yugungsetia.ecommerce_simple.model.ShippingRateRequest;
-import com.yugungsetia.ecommerce_simple.model.ShippingRateResponse;
+import com.yugungsetia.ecommerce_simple.model.*;
 import com.yugungsetia.ecommerce_simple.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +29,14 @@ public class OrderServiceImpl implements OrderService {
     private final UserAddressRepository userAddressRepository;
     private final ProductRepository productRepository;
     private final ShippingService shippingService;
+    private final PaymentService paymentService;
 
     private final BigDecimal TAX_RATE = BigDecimal.valueOf(0.03);
 
 
     @Override
     @Transactional
-    public Order checkout(CheckoutRequest checkoutRequest) {
+    public OrderResponse checkout(CheckoutRequest checkoutRequest) {
         List<CartItem> selectedItems = cartItemRepository.findAllById(checkoutRequest.getSelectedCartItemIds());
         if (selectedItems.isEmpty()) {
             throw new ResourceNotFoundException("Tidak ada item di keranjang belanja untuk checkout");
@@ -114,7 +112,29 @@ public class OrderServiceImpl implements OrderService {
         saveOrder.setTaxFee(taxFee);
         saveOrder.setTotalAmount(totalAmount);
 
-        return orderRepository.save(saveOrder);
+        orderRepository.save(saveOrder);
+
+        String paymentUrl;
+
+        try {
+            PaymentResponse paymentResponse = paymentService.create(saveOrder);
+            saveOrder.setXenditInvoiceId(paymentResponse.getXenditInvoiceId());
+            saveOrder.setXenditPaymentStatus(paymentResponse.getXenditInvoiceStatus());
+            paymentUrl = paymentResponse.getXenditPaymentUrl();
+
+            orderRepository.save(saveOrder);
+        } catch (Exception e) {
+            log.error("Pembayaran atas order" + saveOrder.getOrderId() + " gagal. Degnan pesan :" + e.getMessage());
+            saveOrder.setStatus("PAYMENT_FAILED");
+            orderRepository.save(saveOrder);
+
+           return OrderResponse.fromOrder(saveOrder);
+        }
+
+
+        OrderResponse orderResponse =  OrderResponse.fromOrder(saveOrder);
+        orderResponse.setPaymentUrl(paymentUrl);
+        return orderResponse;
     }
 
     @Override

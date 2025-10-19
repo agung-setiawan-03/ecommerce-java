@@ -6,9 +6,7 @@ import com.yugungsetia.ecommerce_simple.service.OrderService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +28,7 @@ public class OrderController {
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
 
         checkoutRequest.setUserId(userInfo.getUser().getUserId());
-        Order order = orderService.checkout(checkoutRequest);
-        OrderResponse orderResponse = OrderResponse.fromOrder(order);
+        OrderResponse orderResponse = orderService.checkout(checkoutRequest);
         return ResponseEntity.ok(orderResponse);
     }
 
