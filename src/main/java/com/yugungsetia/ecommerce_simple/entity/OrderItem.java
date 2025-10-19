@@ -12,34 +12,32 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "product")
+@Table(name = "order_items")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class OrderItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private long productId;
+    @Column(name = "order_id")
+    private Long orderItemId;
+
+    @Column(name = "order_id", nullable = false)
+    private Long orderId;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
+
+    @Column(name = "user_address_id", nullable = false)
+    private Long userAddressId;
 
     @Column(nullable = false)
-    private String name;
+    private Integer quantity;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @Column(name = "stock_quantity", nullable = false)
-    private Integer stockQuantity;
-
-    @Column(name = "weight", nullable = false)
-    private BigDecimal weight;
-
-    @Column(name = "user_id")
-    private Long userId;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

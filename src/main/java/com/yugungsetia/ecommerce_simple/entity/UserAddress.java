@@ -1,5 +1,6 @@
 package com.yugungsetia.ecommerce_simple.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,38 +9,44 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "product")
+@Table(name = "user_addresses")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class UserAddress {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private long productId;
+    @Column(name = "user_address_id")
+    private Long userAddressId;
 
-    @Column(nullable = false)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(nullable = false)
-    private BigDecimal price;
-
-    @Column(name = "stock_quantity", nullable = false)
-    private Integer stockQuantity;
-
-    @Column(name = "weight", nullable = false)
-    private BigDecimal weight;
-
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Column(name = "address_name", nullable = false)
+    private String addressName;
+
+    @Column(name = "street_address", nullable = false)
+    private String streetAddress;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String state;
+
+    @Column(name = "postal_code", nullable = false)
+    private String postalCode;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(name = "is_default", nullable = false)
+    private Boolean isDefault;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

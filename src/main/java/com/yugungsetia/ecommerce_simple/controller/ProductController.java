@@ -1,8 +1,6 @@
 package com.yugungsetia.ecommerce_simple.controller;
 
-import com.yugungsetia.ecommerce_simple.model.PaginatedProductResponse;
-import com.yugungsetia.ecommerce_simple.model.ProductRequest;
-import com.yugungsetia.ecommerce_simple.model.ProductResponse;
+import com.yugungsetia.ecommerce_simple.model.*;
 import com.yugungsetia.ecommerce_simple.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -59,6 +59,13 @@ public class ProductController {
 
     @PostMapping("")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+
+        UserResponse userResponse = UserResponse.fromUserAndRoles(userInfo.getUser(), userInfo.getRoles());
+
+
+        request.setUser(userInfo.getUser());
         ProductResponse response = productService.create(request);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

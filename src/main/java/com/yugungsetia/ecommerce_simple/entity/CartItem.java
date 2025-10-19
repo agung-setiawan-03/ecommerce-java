@@ -1,5 +1,6 @@
 package com.yugungsetia.ecommerce_simple.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,34 +13,29 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "product")
+@Table(name = "cart_items")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
-    private long productId;
+    @Column(name = "cart_item_id")
+    private Long cartItemId;
+
+    @Column(name = "cart_id", nullable = false)
+    private Long cartId;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
 
     @Column(nullable = false)
-    private String name;
+    private Integer quantity;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
-
-    @Column(name = "stock_quantity", nullable = false)
-    private Integer stockQuantity;
-
-    @Column(name = "weight", nullable = false)
-    private BigDecimal weight;
-
-    @Column(name = "user_id")
-    private Long userId;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

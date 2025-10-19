@@ -1,5 +1,6 @@
 package com.yugungsetia.ecommerce_simple.model;
 
+import com.yugungsetia.ecommerce_simple.entity.User;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -34,4 +35,6 @@ public class ProductRequest {
 
     @NotEmpty(message = "Harus ada satu kategori yang dipilih")
     private List<Long> categoryIds;
+
+    private User user;
 }
